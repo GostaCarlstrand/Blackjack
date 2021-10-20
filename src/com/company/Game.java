@@ -34,27 +34,6 @@ public class Game {
 
     }
 
-    public boolean checkIfHandContainsAce() {
-        for (Cards card : player.currentHand) {
-            if (card.isAce){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkIfDealersHandContainsAce() {
-        for (Cards card : dealer.currentHand) {
-            if (card.isAce){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
-
 
     public void dealStartHand() {
         player.currentHand.add(deck.sortedDeckOfCards.get(0));
@@ -64,7 +43,7 @@ public class Game {
         dealer.currentHandValue = dealer.currentHand.get(0).value;
     }
 
-    public void dealPlayerAnotherCard() {
+    public void dealAnotherCard(Player player) {
         player.currentHand.add(deck.sortedDeckOfCards.get(count));  //Take next card from deck
         player.currentHandValue += deck.sortedDeckOfCards.get(count).value;
         if (player.currentHandValue > 21 && deck.sortedDeckOfCards.get(count).isAce){
@@ -73,15 +52,6 @@ public class Game {
         count += 1;
     }
 
-    public void dealDealerAnotherCard() {
-        //int dealerCount = 0;
-        dealer.currentHand.add(deck.sortedDeckOfCards.get(count));
-        dealer.currentHandValue += deck.sortedDeckOfCards.get(count).value;
-        if (dealer.currentHandValue > 21 && deck.sortedDeckOfCards.get(count).isAce) {
-            dealer.currentHandValue -= 10;      //Reduces 10 to the value if next draw is Ace && total value is > 21
-        }
-        count += 1;
-    }
     public void compareHands() {
         if (dealer.currentHandValue > 21) {     //Has dealer busted
             hasPlayerWonTheGame = true;
@@ -127,7 +97,7 @@ public class Game {
             }
             String menuChoice = menu.menuInput();
             if (menuChoice.equalsIgnoreCase("Take")) {
-                dealPlayerAnotherCard();
+                dealAnotherCard(player);
                 System.out.println("Next card is: " + deck.sortedDeckOfCards.get(count-1).displayCard());
 
                 if (player.currentHandValue > 21) {
@@ -152,7 +122,7 @@ public class Game {
         dealer.displayCurrentHand();
         boolean dealerRunning = true;
         while (dealerRunning) {
-            dealDealerAnotherCard();
+            dealAnotherCard(dealer);
             System.out.println("Next card is: " + deck.sortedDeckOfCards.get(count-1).displayCard());
             if (dealer.currentHandValue >= 17) {
                 System.out.println("Dealer stops at: " + dealer.currentHandValue);
