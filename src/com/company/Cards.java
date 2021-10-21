@@ -16,10 +16,6 @@ public class Cards {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public void setName(String name) {
         this.name = name;
     }

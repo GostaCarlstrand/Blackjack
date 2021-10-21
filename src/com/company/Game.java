@@ -7,6 +7,7 @@ public class Game {
     Player dealer;
     Menu menu;
     int count = 3; //Used to increase the amount of cards that has been dealt
+    int bet;
     boolean hasPlayerWonTheGame;
     boolean gameIsTie;
 
@@ -17,23 +18,35 @@ public class Game {
         player = new Player();
         dealer = new Player();
         menu = new Menu();
-        cardWriter = new VisualCards();
         deck.initCards();           //Creating the objects cards
         deck.sortArrayDeckOfCards(deck.deckOfCards);//Creating a single array with all cards in order
         deck.shuffleDeckOfCards();
+        player.walletBalance = 200;
 
-        //deck.displayShuffleDeckOfCards();   //DISPLAY all shuffle cards
 
     }
+
     public void gameLoop() {
-        initGame();
+        bet = 0;
+        deck.shuffleDeckOfCards();
+        player.displayWalletBalance();
+        System.out.print("How much are you willing to bet?: ");
+        bet = menu.placeBet();
+        player.setWalletBalance(bet);
         dealStartHand();
         gamePlaying();
         displayGameResult();
         wantToPlayAgain();
 
     }
+    public void returnBet() {
+        System.out.println("This is how much you win: "+ (bet*2));
+        player.walletBalance += (bet*2);
+    }
 
+    public void returnMoney(){
+        player.walletBalance += bet;
+    }
 
     public void dealStartHand() {
         player.currentHand.add(deck.sortedDeckOfCards.get(0));
@@ -74,10 +87,12 @@ public class Game {
     public void displayGameResult() {
         if (gameIsTie) {
             System.out.println("There is a draw, you got your money back");
+            returnMoney();
         } else if(!hasPlayerWonTheGame){
             System.out.println("Sorry, you lost this game");
         } else if (hasPlayerWonTheGame) {
             System.out.println("Congratulations, you have won");
+            returnBet();
         }
     }
 
@@ -93,6 +108,7 @@ public class Game {
             System.out.println("You have " + player.currentHandValue);
             if (player.currentHandValue == 21 && (!dealer.currentHand.get(0).isAce)) {
                 System.out.println("BLACKJACK, you have won");
+                System.out.print("How much are you willing to bet?: ");
                 wantToPlayAgain();
             }
             String menuChoice = menu.menuInput();
@@ -139,6 +155,7 @@ public class Game {
             if (menuChoice.equalsIgnoreCase("yes")) {
                 gameLoop();
             } else {
+                System.out.println("Ok, thanks for playing Blackjack with me");
                 quitGame();
             }
         }
