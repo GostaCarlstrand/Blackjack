@@ -21,9 +21,7 @@ public class Game {
         deck.initCards();           //Creating the objects cards
         deck.sortArrayDeckOfCards(deck.deckOfCards);//Creating a single array with all cards in order
         deck.shuffleDeckOfCards();
-        player.walletBalance = 200;
-
-
+        player.walletBalance = 2000;            //Amount of money
     }
 
     public void gameLoop() {
